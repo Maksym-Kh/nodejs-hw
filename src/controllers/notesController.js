@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 
-import Note from '../models/note.js';
+import { Note } from '../models/note.js';
 
 export const getAllNotes = async (req, res) => {
   const { tag, search, page = 1, perPage = 10 } = req.query;
@@ -58,7 +58,7 @@ export const deleteNote = async (req, res) => {
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
   const updateContactById = await Note.findByIdAndUpdate(noteId, req.body, {
-    new: true,
+    returnDocument: 'after',
   });
   if (!updateContactById) {
     throw createHttpError(404, 'Note not found');

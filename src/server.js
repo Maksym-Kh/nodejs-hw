@@ -6,18 +6,22 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
 import { errors } from 'celebrate';
 import 'dotenv/config';
-import noteRouter from './routes/notesRoutes.js';
+import { noteRouter } from './routes/notesRoutes.js';
+import { authRouter } from './routes/authRoutes.js';
+import cookieParser from "cookie-parser";
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 await connectMongoDB();
 
 app.use(logger());
 
+app.use(authRouter);
 app.use(noteRouter);
 
 app.use(notFoundHandler);

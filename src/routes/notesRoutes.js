@@ -14,8 +14,11 @@ import {
   deleteNote,
   updateNote,
 } from '../controllers/notesController.js';
+import { authenticate } from "../middleware/authenticate.js";
 
-const noteRouter = Router();
+export const noteRouter = Router();
+
+noteRouter.use(authenticate);
 
 noteRouter.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
 
@@ -26,5 +29,3 @@ noteRouter.post('/notes', celebrate(createNoteSchema), createNote);
 noteRouter.delete('/notes/:noteId', celebrate(noteIdSchema), deleteNote);
 
 noteRouter.patch('/notes/:noteId', celebrate(updateNoteSchema), updateNote);
-
-export default noteRouter;

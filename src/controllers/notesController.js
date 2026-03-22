@@ -5,18 +5,18 @@ import { Note } from '../models/note.js';
 export const getAllNotes = async (req, res) => {
   const { tag, search, page = 1, perPage = 10 } = req.query;
   const skip = (page - 1) * perPage;
-  let noteQuery = Note.find({ userId: req.user._id });
+  const noteQuery = Note.find({ userId: req.user._id });
 
   if (tag) {
     noteQuery.where('tag').equals(tag);
   }
 
   if (search) {
-    noteQuery = noteQuery.find({ $text: { $search: search }, userId: req.user._id });
+    noteQuery.find({ $text: { $search: search } });
   }
 
   const [totalNotes, notes] = await Promise.all([
-    noteQuery.clone().countDocuments(),
+    noteQuery.clone().countDocuments(noteQuery.getFilter()),
     noteQuery.skip(skip).limit(perPage),
   ]);
 
@@ -60,7 +60,7 @@ export const deleteNote = async (req, res) => {
 
 export const updateNote = async (req, res) => {
   const { noteId } = req.params;
-  const updatedNote = await Note.findByIdAndUpdate({_id: noteId, userId: req.user._id}, req.body, {
+  const updatedNote = await Note.findOneAndUpdate({_id: noteId, userId: req.user._id}, req.body, {
     returnDocument: 'after',
   });
   if (!updatedNote) {

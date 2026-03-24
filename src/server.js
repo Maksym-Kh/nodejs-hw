@@ -8,7 +8,8 @@ import { errors } from 'celebrate';
 import 'dotenv/config';
 import { noteRouter } from './routes/notesRoutes.js';
 import { authRouter } from './routes/authRoutes.js';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
+import { userRouter } from './routes/userRoutes.js';
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
@@ -23,6 +24,7 @@ app.use(logger());
 
 app.use(authRouter);
 app.use(noteRouter);
+app.use(userRouter);
 
 app.use(notFoundHandler);
 

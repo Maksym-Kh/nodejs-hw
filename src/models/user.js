@@ -1,27 +1,31 @@
 import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
-    {
-        username: {
-            type: String,
-            trim: true,
-        },
-        email: {
-            type: String,
-            required: true,
-            unique: true,
-            trim: true,
-        },
-        password: {
-            type: String,
-            required: true,
-            min: 8,
-        }
+  {
+    username: {
+      type: String,
+      trim: true,
     },
-    {
-        timestamps: true,
-        versionKey: false,
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
     },
+    password: {
+      type: String,
+      required: true,
+      min: 8,
+    },
+    avatar: {
+      type: String,
+      default: 'https://ac.goit.global/fullstack/react/default-avatar.jpg',
+    },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+  },
 );
 
 userSchema.pre('save', function () {
@@ -36,4 +40,4 @@ userSchema.methods.toJSON = function () {
   return obj;
 };
 
-export const User = model("user", userSchema);
+export const User = model('user', userSchema);
